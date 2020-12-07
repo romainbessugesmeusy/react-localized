@@ -1,0 +1,39 @@
+{
+  "name": "react-localized-example",
+  "homepage": ".",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ../node_modules/react-scripts/bin/react-scripts.js start",
+    "build": "node ../node_modules/react-scripts/bin/react-scripts.js build",
+    "test": "node ../node_modules/react-scripts/bin/react-scripts.js test",
+    "eject": "node ../node_modules/react-scripts/bin/react-scripts.js eject"
+  },
+  "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^23.1.0",
+    "@ckeditor/ckeditor5-build-inline": "^23.1.0",
+    "@ckeditor/ckeditor5-react": "^3.0.0",
+    "@reach/router": "^1.3.4",
+    "campsi-find-references": "^1.0.2",
+    "dompurify": "^2.2.2",
+    "raw-loader": "^4.0.2",
+    "react": "link:../node_modules/react",
+    "react-dom": "link:../node_modules/react-dom",
+    "react-localized": "link:..",
+    "react-scripts": "link:../node_modules/react-scripts",
+    "react-syntax-highlighter": "^15.3.1"
+  },
+  "devDependencies": {
+    "@babel/plugin-syntax-object-rest-spread": "^7.8.3",
+    "prettier": "^2.2.0"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

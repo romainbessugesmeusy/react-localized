@@ -1,0 +1,59 @@
+{
+  "clientId": "5c7ce02205f1c66c7dd0d078",
+  "title": {
+    "en": "Untitled project",
+    "fr": "Projet sans titre"
+  },
+  "messages": [
+    {
+      "id": "get_in_car",
+      "message": {
+        "en": "Get in the car",
+        "fr": "Monte dans la voiture",
+        "fr-CA": "Grimpe dans ton char"
+      }
+    },
+    {
+      "id": "meet_in_parking",
+      "message": {
+        "en": "Meet you at the parking facility",
+        "en-CA": "Meet you at the parkade",
+        "fr": "On se voit dans le parking"
+      }
+    }
+  ],
+  "locales": [
+    {
+      "tag": "en",
+      "language": {
+        "en": "Common english",
+        "fr": "Anglais générique"
+      }
+    },
+    {
+      "tag": "en",
+      "region": "CA",
+      "language": {
+        "en": "Canadian english",
+        "fr": "Anglais canadien"
+      },
+      "fallback": "en"
+    },
+    {
+      "tag": "fr",
+      "language": {
+        "en": "Common french",
+        "fr": "Français générique"
+      },
+      "fallback": "en"
+    },
+    {
+      "tag": "fr-CA",
+      "language": {
+        "en": "Canadian french",
+        "fr": "Français Québécois"
+      },
+      "fallback": "fr"
+    }
+  ]
+}
