@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { getLocaleIdentifier, getLocalesMap, useLocalized } from "./index";
 import LocaleShape from "./LocalShape";
 
-export default function LocaleChooser(props) {
+function LocaleChooser(props) {
   const [searchValue, setSearchValue] = useState("");
   const [filteredLocales, setFilteredLocales] = useState(props.locales);
   const selectedLocales = props.multiple
@@ -148,3 +148,5 @@ LocaleChooser.propTypes = {
   name: PropTypes.string,
   optionRender: PropTypes.func,
 };
+
+export default LocaleChooser;
