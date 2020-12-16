@@ -9,7 +9,7 @@ import "react-localized/dist/index.css";
 import { Router } from "@reach/router";
 
 import locales from "./locales";
-import strings from "./strings";
+import data from "./data";
 import Introduction from "./pages/Introduction";
 import Components from "./pages/Components";
 import Editor from "./pages/Editor";
@@ -18,8 +18,8 @@ import Nav from "./Nav";
 const App = () => {
   const localesMap = getLocalesMap(locales);
   const [appLocale, setAppLocale] = useState(localesMap["fr-FR"]);
-  const [localizedValues, setLocalizedValues] = useState(strings);
-  const [t, getLocalizedValue] = generateTranslatorAndGetter(
+  const [localizedValues, setLocalizedValues] = useState(data);
+  const { getLocalized } = generateTranslatorAndGetter(
     locales,
     appLocale,
     localizedValues
@@ -32,13 +32,13 @@ const App = () => {
       >
         <aside>
           <h1>React&nbsp;Localized</h1>
-          <Nav />
+          <Nav struct={data.nav} />
           <LocaleSelect
             value={appLocale}
             onChange={setAppLocale}
             locales={locales}
             optionRender={({ locale }) => {
-              return `${locale.flag ? locale.flag : ""} ${getLocalizedValue(
+              return `${locale.flag ? locale.flag : ""} ${getLocalized(
                 locale.language
               )}`;
             }}

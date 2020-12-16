@@ -3,7 +3,7 @@ import LocaleChooser from "./LocaleChooser";
 import LocalizedInput from "./LocalizedInput";
 import LocalizedContext, { useLocalized } from "./LocalizedContext";
 import LocaleSelect from "./LocaleSelect";
-import "./styles.module.css";
+import LocalizedElement from "./LocalizedElement";
 
 /**
  * @typedef Locale
@@ -23,7 +23,7 @@ import "./styles.module.css";
  * @returns {string}
  */
 
-export function getLocaleIdentifier(locale) {
+function getLocaleIdentifier(locale) {
   if (locale.id) {
     return locale.id;
   }
@@ -35,7 +35,7 @@ export function getLocaleIdentifier(locale) {
  * @param {Locale[]} locales
  * @returns {Object<String,Locale>}
  */
-export function getLocalesMap(locales) {
+function getLocalesMap(locales) {
   return locales.reduce((map, locale) => {
     return { ...map, [getLocaleIdentifier(locale)]: locale };
   }, {});
@@ -48,7 +48,7 @@ export function getLocalesMap(locales) {
  * @param {Object<String,String>} value
  * @returns {String|undefined}
  */
-export const getFallbackValue = (locales, localeId, value) => {
+function getFallbackValue(locales, localeId, value) {
   const map = getLocalesMap(locales);
   const locale = map[localeId];
   if (!locale || !value) {
@@ -78,21 +78,29 @@ export const getFallbackValue = (locales, localeId, value) => {
       });
   }
   return localizedValue;
-};
+}
+
+/**
+ * @typedef {Function} getLocalized
+ * @param {Object|string|undefined} value
+ * @param {string} [fallback]
+ * @returns {string}
+ */
+
 
 /**
  *
  * @param {Locale[]} locales
  * @param {Locale} locale
- * @returns {function(*=, *): (*)}
+ * @returns {getLocalized}
  */
-function generateLocalizedValueGetter(locales, locale) {
+function generateLocalizedGetter(locales, locale) {
   if (!locale) {
     throw new Error(
       "Trying to generate a localizedValueGetter without a target locale"
     );
   }
-  function getLocalizedValue(value, fallback) {
+  function getLocalized(value, fallback = "") {
     switch (typeof value) {
       case "string":
         return value;
@@ -112,19 +120,40 @@ function generateLocalizedValueGetter(locales, locale) {
     }
     return fallback;
   }
-  return getLocalizedValue;
+  return getLocalized;
 }
 
 /**
+ * @typedef {Object} TranslatorAndGetterReturnValue
+ * @property {translator} translator
+ * @property {translator} t - A shorthand to the translator function
+ * @property {function(String):translator} scopedTranslator - Generates a scoped translator
+ * @property {getLocalized} getLocalized
+ */
+
+/**
+ * @typedef {Function} translator
+ * @param {string} translationId
+ * @returns {string}
+ */
+
+/**
+ * @typedef {Function} scopedTranslator
+ * @param {String} scope
+ * @returns {translator}
+ */
+
+/**
  *
- * @param {Locale[]} locales
- * @param {Locale} locale
- * @param {Object} localizedValues
- * @returns {((function(*=): *)|(function(*=, *): *))[]}
+ * @param locales
+ * @param locale
+ * @param localizedValues
+ * @returns {{scopedTranslator: scopedTranslator, t: translator, getLocalized: getLocalized, translator: translator}}
  */
 function generateTranslatorAndGetter(locales, locale, localizedValues) {
-  const getLocalizedValue = generateLocalizedValueGetter(locales, locale);
-  function translator(translationId) {
+  const getLocalized = generateLocalizedGetter(locales, locale);
+
+  const translator = (translationId) => {
     let segment,
       value = localizedValues,
       segments = translationId.split(".");
@@ -132,9 +161,14 @@ function generateTranslatorAndGetter(locales, locale, localizedValues) {
     while ((segment = segments.shift()) && typeof value === "object") {
       value = value[segment];
     }
-    return getLocalizedValue(value, translationId);
+    return getLocalized(value, translationId);
   }
-  return [translator, getLocalizedValue];
+
+  const scopedTranslator = (scope) => (translationId) => {
+    return translator([scope, translationId].join("."));
+  };
+
+  return { translator, t: translator, scopedTranslator, getLocalized };
 }
 
 export {
@@ -143,6 +177,10 @@ export {
   LocaleSelect,
   LocalizedContext,
   useLocalized,
-  generateLocalizedValueGetter,
+  getFallbackValue,
+  getLocalesMap,
+  getLocaleIdentifier,
+  generateLocalizedGetter,
   generateTranslatorAndGetter,
+  LocalizedElement,
 };

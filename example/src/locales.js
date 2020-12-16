@@ -3,11 +3,13 @@ export default [
     tag: "en",
     language: { fr: "Anglais commun", en: "Common English" },
     keywords: "english",
+    flag: "🇺🇸",
   },
   {
     tag: "fr",
     language: { fr: "Français", en: "French" },
     keywords: "Français",
+    flag: "🇫🇷",
   },
   {
     language: { fr: "Anglais britannique", en: "British english" },

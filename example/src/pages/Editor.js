@@ -4,6 +4,17 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import findRef from "campsi-find-references";
 
+function downloadJSON(exportObj, exportName) {
+  const dataStr =
+    "data:text/json;charset=utf-8," +
+    encodeURIComponent(JSON.stringify(exportObj, null, 2));
+  const downloadAnchorNode = document.createElement("a");
+  downloadAnchorNode.setAttribute("href", dataStr);
+  downloadAnchorNode.setAttribute("download", exportName + ".json");
+  document.body.appendChild(downloadAnchorNode); // required for firefox
+  downloadAnchorNode.click();
+  downloadAnchorNode.remove();
+}
 function RichTextLocalizedControl({ onChange, value, placeholder, lang }) {
   return (
     <CKEditor
@@ -35,16 +46,22 @@ function RichTextLocalizedControl({ onChange, value, placeholder, lang }) {
 }
 
 const strings = [
-
-  { name: "pages.introduction.title" },
-  { name: "pages.introduction.content", rich: true },
+  { name: "pages.intro.title" },
+  { name: "pages.intro.motivation.title" },
+  { name: "pages.intro.motivation.text", rich: true },
+  { name: "pages.intro.install.title" },
+  { name: "pages.intro.install.text", rich: true },
+  { name: "pages.intro.usage.title" },
+  { name: "pages.intro.usage.text", rich: true },
+  { name: "pages.intro.model.title" },
+  { name: "pages.intro.model.text", rich: true },
   { name: "pages.components.title" },
   { name: "pages.components.localizedInput.description", rich: true },
-    { name: "pages.editor.title" },
+  { name: "pages.editor.title" },
 ];
 
 export default function Editor({ onChange, localizedValues, locales }) {
-  const [t] = useLocalized();
+  const { t } = useLocalized();
   const localeChooserRef = useRef(null);
   const [localeChooserActive, setLocaleChooserActive] = useState(false);
   const [selectedLocales, setSelectedLocales] = useState(
@@ -96,7 +113,12 @@ export default function Editor({ onChange, localizedValues, locales }) {
           />
         </div>
       </div>
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          downloadJSON(localizedValues, "strings");
+        }}
+      >
         {strings.map(({ name, rich }) => {
           const value = findRef(localizedValues, name.split("."))[0];
           return (
@@ -109,11 +131,13 @@ export default function Editor({ onChange, localizedValues, locales }) {
                 locales={locales}
                 displayedLocales={selectedLocales}
                 controlRender={rich && RichTextLocalizedControl}
-                appearance={rich && "tabs-below"}
+                labelRender={({ locale }) => locale.flag}
+                appearance={rich ? "tabs-below" : "grid"}
               />
             </div>
           );
         })}
+        <button>Export JSON</button>
       </form>
     </article>
   );

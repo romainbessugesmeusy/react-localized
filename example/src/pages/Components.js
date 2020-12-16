@@ -1,8 +1,8 @@
 import React from "react";
 import { useLocalized } from "react-localized";
-import DOMPurify  from "dompurify";
+import DOMPurify from "dompurify";
 export default function Components(props) {
-  const [t] = useLocalized();
+  const { t } = useLocalized();
 
   return (
     <article className="components">
@@ -11,7 +11,9 @@ export default function Components(props) {
       <div
         className="description"
         dangerouslySetInnerHTML={{
-          __html: DOMPurify.sanitize(t("pages.components.localizedInput.description")),
+          __html: DOMPurify.sanitize(
+            t("pages.components.localizedInput.description")
+          ),
         }}
       />
     </article>

@@ -1,10 +1,10 @@
 {
-  "name": "react-localized",
-  "version": "1.0.0",
+  "name": "@axeptio/react-localized",
+  "version": "0.0.1",
   "description": "Localized Fields and Values for React Apps",
   "author": "romainbessugesmeusy",
   "license": "MIT",
-  "repository": "axeptio/react-localized",
+  "repository": "romainbessugesmeusy/react-localized",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.js",

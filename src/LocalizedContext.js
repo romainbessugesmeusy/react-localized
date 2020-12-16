@@ -1,20 +1,33 @@
 import React, { useContext } from "react";
 import { generateTranslatorAndGetter } from "./index";
 
-const LocalizedContext = React.createContext({
+const defaultValue = {
+  /**
+   * @type {Locale[]}
+   */
   locales: [],
+  /**
+   * @type {Locale}
+   */
   locale: {},
+  /**
+   * type {Object}
+   */
   localizedValues: {},
-});
-
-const useLocalized = function () {
-  const context = useContext(LocalizedContext);
-  return generateTranslatorAndGetter(
-    context.locales,
-    context.locale,
-    context.localizedValues
-  );
 };
 
+const LocalizedContext = React.createContext(defaultValue);
+
+function useLocalized() {
+  const context = useContext(LocalizedContext);
+  return {
+    ...generateTranslatorAndGetter(
+      context.locales,
+      context.locale,
+      context.localizedValues
+    ),
+    ...context,
+  };
+}
 export default LocalizedContext;
 export { useLocalized };

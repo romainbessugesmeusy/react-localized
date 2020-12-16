@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { getLocaleIdentifier, getFallbackValue } from "./index";
 import LocaleShape from "./LocalShape";
 
+const filterClassNames = (c) => !!c;
+
 export default function LocalizedInput({
   readOnlyLocales,
   locales,
@@ -24,81 +26,80 @@ export default function LocalizedInput({
   const handleChange = (localeId) => (event) => {
     onChange({ ...value, [localeId]: event.target.value }, name);
   };
-  const classNames = ["localized-input", className, appearance].filter(
-    (c) => !!c
-  );
+  const classNames = ["localized-input", className, appearance]
+    .filter(filterClassNames)
+    .join(" ");
+
   const _displayedLocales = Array.isArray(displayedLocales)
     ? displayedLocales
     : locales;
-  return (
-    <div className={classNames.join(" ")}>
-      {appearance === "tabs" && (
-        <div className="labels">
-          {_displayedLocales.map((locale) => {
-            const id = getLocaleIdentifier(locale);
-            const isActive = activeTab === id;
-            return (
-              <div
-                key={id}
-                className={`label ${isActive ? "active" : ""}`}
-                data-active={isActive}
-                onClick={() => setActiveTab(id)}
-              >
-                {labelRender({ locale })}
-              </div>
-            );
-          })}
-        </div>
-      )}
-      <div className="controls">
+
+  const renderTabs = () => {
+    return (
+      <div className="labels" role="tablist">
         {_displayedLocales.map((locale) => {
           const id = getLocaleIdentifier(locale);
-          const readOnly = readOnlyLocales.includes(id);
           const isActive = activeTab === id;
-          const inputProps = {
-            isActive,
-            onChange: handleChange(id),
-            readOnly,
-            isMultiline,
-            disabled: readOnly,
-            placeholder: getFallbackValue(locales, id, value),
-            value: typeof value === "object" ? value[id] || "" : "",
-            lang: id,
-            dir: locale.direction,
-          };
           return (
-            <div
+            <button
               key={id}
-              className={`control ${controlClassName} ${
-                isActive ? "active" : ""
-              }`}
-              data-lang={id}
+              role="tab"
+              type="button"
+              className={`label ${isActive ? "active" : ""}`}
               data-active={isActive}
+              aria-selected={isActive}
+              onClick={() => setActiveTab(id)}
             >
-              {["list", "grid"].includes(appearance) && labelRender({ locale })}
-              {controlRender(inputProps)}
-            </div>
+              {labelRender({ locale })}
+            </button>
           );
         })}
       </div>
-      {appearance === "tabs-below" && (
-        <div className="labels">
-          {_displayedLocales.map((locale) => {
-            const id = getLocaleIdentifier(locale);
-            const isActive = activeTab === id;
-            return (
-              <div
-                key={id}
-                className={`label ${isActive ? "active" : ""}`}
-                data-active={isActive}
-                onClick={() => setActiveTab(id)}
-              >
-                {labelRender({ locale })}
-              </div>
-            );
-          })}
-        </div>
-      )}
+    );
+  };
+
+  const renderControl = (locale) => {
+    const id = getLocaleIdentifier(locale);
+    const readOnly = readOnlyLocales.includes(id);
+    const isActive = activeTab === id;
+    const inputProps = {
+      isActive,
+      onChange: handleChange(id),
+      readOnly,
+      isMultiline,
+      disabled: readOnly,
+      placeholder: getFallbackValue(locales, id, value),
+      value: typeof value === "object" ? value[id] || "" : "",
+      lang: id,
+      dir: locale.direction,
+    };
+    const shouldRenderLabel = ["list", "grid"].includes(appearance);
+    const controlClassNames = [
+      "control",
+      controlClassName,
+      isActive && "active",
+    ]
+      .filter(filterClassNames)
+      .join(" ");
+    return (
+      <div
+        key={id}
+        className={controlClassNames}
+        data-lang={id}
+        data-active={isActive}
+        role={appearance.startsWith("tabs") ? "tabpanel" : "textbox"}
+      >
+        {shouldRenderLabel && labelRender({ locale })}
+        {controlRender(inputProps)}
+      </div>
+    );
+  };
+
+  return (
+    <div className={classNames}>
+      {appearance === "tabs" && renderTabs()}
+      <div className="controls">{_displayedLocales.map(renderControl)}</div>
+      {appearance === "tabs-below" && renderTabs()}
     </div>
   );
 }
