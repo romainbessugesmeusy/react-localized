@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocalized, LocalizedElement } from "react-localized";
+import { useLocalized, LocalizedElement, LocaleChooser } from "react-localized";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import docco from "react-syntax-highlighter/dist/esm/styles/hljs/github";
 import js from "react-syntax-highlighter/dist/esm/languages/hljs/javascript";
@@ -34,13 +34,14 @@ export default function MyHomePage() {
 `;
 
 export default function Introduction() {
-  const { scopedTranslator } = useLocalized();
+  const { scopedTranslator, locales, locale, setLocale } = useLocalized();
   // Instead of rewriting pages.intro everytime,
   // we use this "scopedTranslator" helper
   const ts = scopedTranslator("pages.intro");
 
   return (
     <article className="intro">
+      <LocaleChooser locales={locales} value={locale} onChange={setLocale} />
       <h1>{ts("title")}</h1>
       <h2 id="motivation">{ts("motivation.title")}</h2>
       <LocalizedElement t="pages.intro.motivation.text">

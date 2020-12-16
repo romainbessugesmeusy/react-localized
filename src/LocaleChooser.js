@@ -10,7 +10,7 @@ export default function LocaleChooser(props) {
     ? props.value.map((locale) => getLocaleIdentifier(locale))
     : [getLocaleIdentifier(props.value)];
   const map = getLocalesMap(props.locales);
-  const [t, getLocalizedValue] = useLocalized();
+  const { getLocalized } = useLocalized();
 
   useEffect(() => {
     if (searchValue === "") {
@@ -32,7 +32,7 @@ export default function LocaleChooser(props) {
         }
         if (
           locale.language &&
-          getLocalizedValue(locale.language).match(
+          getLocalized(locale.language).match(
             new RegExp(`.*${searchValue}.*`, "i")
           )
         ) {
@@ -109,7 +109,7 @@ const LocaleOption = ({
   checked,
   locale,
 }) => {
-  const [t, getLocalizedValue] = useLocalized();
+  const { getLocalized } = useLocalized();
   return (
     <label className={checked ? "selected" : ""}>
       <input
@@ -120,7 +120,7 @@ const LocaleOption = ({
         onChange={(event) => (event.target.checked ? onSelect() : onDeselect())}
       />
       {locale.flag && <span className="flag">{locale.flag}</span>}
-      <span className="language">{getLocalizedValue(locale.language)}</span>
+      <span className="language">{getLocalized(locale.language)}</span>
     </label>
   );
 };

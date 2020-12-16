@@ -14,6 +14,13 @@ const defaultValue = {
    * type {Object}
    */
   localizedValues: {},
+  /**
+   * @function setLocale
+   * @param {Locale} locale
+   */
+  setLocale: function setLocale(locale){
+
+  }
 };
 
 const LocalizedContext = React.createContext(defaultValue);

@@ -28,7 +28,12 @@ const App = () => {
   return (
     <div className="app">
       <LocalizedContext.Provider
-        value={{ locales, locale: appLocale, localizedValues }}
+        value={{
+          locales,
+          locale: appLocale,
+          localizedValues,
+          setLocale: setAppLocale,
+        }}
       >
         <aside>
           <h1>React&nbsp;Localized</h1>
