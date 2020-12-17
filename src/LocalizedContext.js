@@ -18,13 +18,23 @@ const defaultValue = {
    * @function setLocale
    * @param {Locale} locale
    */
-  setLocale: function setLocale(locale){
-
-  }
+  setLocale: function setLocale(locale) {},
 };
 
 const LocalizedContext = React.createContext(defaultValue);
 
+/**
+ *
+ * @returns {{
+ *  locales:Locale[],
+ *  locale:Locale,
+ *  translator:translator,
+ *  t:translator,
+ *  getLocalized:getLocalized,
+ *  setLocale:setLocale,
+ *  scopedTranslator:scopedTranslator
+ *  }}
+ */
 function useLocalized() {
   const context = useContext(LocalizedContext);
   return {
@@ -36,5 +46,6 @@ function useLocalized() {
     ...context,
   };
 }
+
 export default LocalizedContext;
 export { useLocalized };

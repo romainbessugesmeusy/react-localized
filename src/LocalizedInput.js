@@ -1,7 +1,28 @@
 import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import { getLocaleIdentifier, getFallbackValue } from "./index";
-import LocaleShape from "./LocalShape";
+
+const LocaleShape = PropTypes.shape({
+  // two-char language code ("en", "fr", "de")
+  tag: PropTypes.string.isRequired,
+  // human readable language description
+  language: PropTypes.oneOf([PropTypes.object, PropTypes.string]).isRequired,
+  //latin, cyrillic, etc.
+  script: PropTypes.string,
+  // two-char region code ("US", "CA", "GB", "CH")
+  region: PropTypes.string,
+  // text direction / orientation: right to left, left to right
+  orientation: PropTypes.oneOf(["rtl", "ltr"]),
+  // optional emoji string for displaying a flag 🇨🇬 🇲🇼 🇹🇩
+  flag: PropTypes.string,
+  // String that can be used to search for a locale
+  keywords: PropTypes.string,
+  // locale identifier of the fallback locale
+  fallback: PropTypes.string,
+  // optional identifier. If not specified, locale identifier will result in the concatenation
+  // of tag and region, with a dash separator: "en-GB", "fr-CA", "nl-BE"
+  id: PropTypes.string,
+});
 
 const filterClassNames = (c) => !!c;
 
@@ -118,7 +139,7 @@ LocalizedInput.propTypes = {
   displayedLocales: PropTypes.arrayOf(LocaleShape),
   isMultiline: PropTypes.bool,
   controlRender: PropTypes.func,
-  appearance: PropTypes.oneOf(["tabs", "grid", "list", "tabs-below"]),
+  appearance: PropTypes.oneOf(["tabs", " ", "list", "tabs-below"]),
   labelRender: PropTypes.func,
   defaultActiveTab: PropTypes.string,
 };

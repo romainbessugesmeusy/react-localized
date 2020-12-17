@@ -24,6 +24,9 @@ import LocalizedElement from "./LocalizedElement";
  */
 
 function getLocaleIdentifier(locale) {
+  if (!locale) {
+    return "";
+  }
   if (locale.id) {
     return locale.id;
   }
@@ -82,11 +85,10 @@ function getFallbackValue(locales, localeId, value) {
 
 /**
  * @typedef {Function} getLocalized
- * @param {Object|string|undefined} value
- * @param {string} [fallback]
+ * @param {Object|string|undefined} value - Object of String in which to find the localized version of the data
+ * @param {string} [fallback] - value to return if no localized string is found
  * @returns {string}
  */
-
 
 /**
  *
@@ -133,21 +135,21 @@ function generateLocalizedGetter(locales, locale) {
 
 /**
  * @typedef {Function} translator
- * @param {string} translationId
+ * @param {string} translationId - the dotted string pattern to access the translation in the localized values
  * @returns {string}
  */
 
 /**
  * @typedef {Function} scopedTranslator
- * @param {String} scope
+ * @param {String} scope - initial path in the dotted string pattern
  * @returns {translator}
  */
 
 /**
  *
- * @param locales
- * @param locale
- * @param localizedValues
+ * @param {Locale[]} locales
+ * @param {Locale} locale
+ * @param {Object} localizedValues
  * @returns {{scopedTranslator: scopedTranslator, t: translator, getLocalized: getLocalized, translator: translator}}
  */
 function generateTranslatorAndGetter(locales, locale, localizedValues) {
@@ -162,7 +164,7 @@ function generateTranslatorAndGetter(locales, locale, localizedValues) {
       value = value[segment];
     }
     return getLocalized(value, translationId);
-  }
+  };
 
   const scopedTranslator = (scope) => (translationId) => {
     return translator([scope, translationId].join("."));
