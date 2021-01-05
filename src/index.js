@@ -4,17 +4,18 @@ import LocalizedInput from "./LocalizedInput";
 import LocalizedContext, { useLocalized } from "./LocalizedContext";
 import LocaleSelect from "./LocaleSelect";
 import LocalizedElement from "./LocalizedElement";
-
+import LocaleShape from "./LocalShape";
 /**
  * @typedef Locale
  * @property {String} tag two-char language code ("en", "fr", "de")
- * @property {String} region two-char region code ("US", "CA", "GB", "CH")
+ * @property {String} [region] two-char region code ("US", "CA", "GB", "CH")
  * @property {Object|String} language human readable language description
- * @property {String} direction text direction / orientation: right to left, left to right. One of rtl, ltr
- * @property {String} flag optional emoji string for displaying a flag 🇨🇬 🇲🇼 🇹🇩
- * @property {String} keywords locale identifier of the fallback locale
- * @property {String} script latin, cyrillic, etc.
- * @property {String} id optional identifier. If not specified, locale identifier will result in the concatenation of tag and region, with a dash separator: "en-GB", "fr-CA", "nl-BE"
+ * @property {String} [direction] text direction / orientation: right to left, left to right. One of rtl, ltr
+ * @property {String} [flag] optional emoji string for displaying a flag 🇨🇬 🇲🇼 🇹🇩
+ * @property {String} [keywords] locale identifier of the fallback locale
+ * @property {String} [script] latin, cyrillic, etc.
+ * @property {String} [fallback] locale identifier of the locale to fallback to if no translation is present
+ * @property {String} [id] optional identifier. If not specified, locale identifier will result in the concatenation of tag and region, with a dash separator: "en-GB", "fr-CA", "nl-BE"
  */
 
 /**
@@ -177,6 +178,7 @@ export {
   LocalizedInput,
   LocaleChooser,
   LocaleSelect,
+  LocaleShape,
   LocalizedContext,
   useLocalized,
   getFallbackValue,
