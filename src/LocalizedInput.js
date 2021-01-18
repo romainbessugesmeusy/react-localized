@@ -84,6 +84,12 @@ export default function LocalizedInput({
       value: getStringValue(value, id),
       lang: id,
       dir: locale.direction,
+      onFocus: () => {
+        setActiveTab(id);
+      },
+      onBlur: () => {
+        setActiveTab(null)
+      }
     };
     const shouldRenderLabel = ["list", "grid"].includes(appearance);
     const controlClassNames = [
