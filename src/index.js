@@ -157,14 +157,26 @@ function generateTranslatorAndGetter(locales, locale, localizedValues) {
   const getLocalized = generateLocalizedGetter(locales, locale);
 
   const translator = (translationId) => {
-    let segment,
-      value = localizedValues,
-      segments = translationId.split(".");
+    if (typeof translationId === "string") {
+      let segment,
+        value = localizedValues,
+        segments = translationId.split(".");
 
-    while ((segment = segments.shift()) && typeof value === "object") {
-      value = value[segment];
+      while ((segment = segments.shift()) && typeof value === "object") {
+        value = value[segment];
+      }
+      return getLocalized(value, translationId);
     }
-    return getLocalized(value, translationId);
+
+    if (translationId === "object") {
+      return getLocalized(translationId);
+    }
+
+    console.warn(
+      "ReactLocalized translator attempted to translate an invalid variable of type",
+      typeof translationId
+    );
+    return "";
   };
 
   const scopedTranslator = (scope) => (translationId) => {
@@ -172,6 +184,10 @@ function generateTranslatorAndGetter(locales, locale, localizedValues) {
   };
 
   return { translator, t: translator, scopedTranslator, getLocalized };
+}
+
+function localesAreEquals(l1, l2) {
+  return getLocaleIdentifier(l1) === getLocaleIdentifier(l2);
 }
 
 export {
@@ -184,6 +200,7 @@ export {
   getFallbackValue,
   getLocalesMap,
   getLocaleIdentifier,
+  localesAreEquals,
   generateLocalizedGetter,
   generateTranslatorAndGetter,
   LocalizedElement,

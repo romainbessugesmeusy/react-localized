@@ -58,18 +58,30 @@ export default function LocalizedInput({
     );
   };
 
+  const getStringValue = (value, id) => {
+    switch (typeof value) {
+      case "object":
+        return value[id] || "";
+      case "string":
+        return value;
+      default:
+        return "";
+    }
+  };
   const renderControl = (locale) => {
     const id = getLocaleIdentifier(locale);
     const readOnly = readOnlyLocales.includes(id);
     const isActive = activeTab === id;
+
     const inputProps = {
+      locale,
       isActive,
       onChange: handleChange(id),
       readOnly,
       isMultiline,
       disabled: readOnly,
       placeholder: getFallbackValue(locales, id, value),
-      value: typeof value === "object" ? value[id] || "" : "",
+      value: getStringValue(value, id),
       lang: id,
       dir: locale.direction,
     };
