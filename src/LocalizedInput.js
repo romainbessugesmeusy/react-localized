@@ -62,8 +62,6 @@ export default function LocalizedInput({
     switch (typeof value) {
       case "object":
         return value[id] || "";
-      case "string":
-        return value;
       default:
         return "";
     }

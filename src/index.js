@@ -58,6 +58,9 @@ function getFallbackValue(locales, localeId, value) {
   if (!locale || !value) {
     return;
   }
+  if (typeof value === "string") {
+    return value;
+  }
   let localizedValue,
     fallbackId = locale.fallback,
     fallbackLocale = map[locale.fallback];
